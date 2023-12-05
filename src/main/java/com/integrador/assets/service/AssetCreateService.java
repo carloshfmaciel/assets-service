@@ -21,7 +21,7 @@ public class AssetCreateService {
 		try {
 			JSONObject assetsResponse = manuSisApiClient.fetchAssets();
 			JSONArray jsonArray = assetsResponse.getJSONArray("data");
-			assetsRepository.deleteAllAndSaveAll(jsonArray);
+			assetsRepository.save(jsonArray);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

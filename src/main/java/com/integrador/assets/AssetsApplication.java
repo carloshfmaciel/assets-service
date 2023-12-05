@@ -31,7 +31,7 @@ public class AssetsApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		//System.out.println(mongoTemplate.findAll(DBObject.class, "asset").size());;
-		assetCreateService.createAssets();
+		//assetCreateService.createAssets();
 		//assetRepository.deleteAll();
 	}
 }
