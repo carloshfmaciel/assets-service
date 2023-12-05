@@ -2,7 +2,7 @@ package com.integrador.assets.service;
 
 import com.integrador.assets.client.api.APIClient;
 import com.integrador.assets.domain.JsonDocument;
-import com.integrador.assets.repository.MongoDbRepository;
+import com.integrador.assets.mongo.repository.MongoDbRepository;
 import com.integrador.assets.service.AssetService;
 import com.integrador.assets.service.JsonDocumentService;
 
