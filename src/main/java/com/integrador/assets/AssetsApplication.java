@@ -33,5 +33,9 @@ public class AssetsApplication implements CommandLineRunner {
 		//System.out.println(mongoTemplate.findAll(DBObject.class, "asset").size());;
 		//assetCreateService.createAssets();
 		//assetRepository.deleteAll();
+//		Query query = new Query();
+//		query.fields().include("asset_type.description");
+//		List<String> result = mongoTemplate.find(query, String.class, "asset");
+//		System.out.println(result.stream().map(obj -> new JSONObject(obj)).collect(Collectors.toSet()));
 	}
 }

@@ -2,21 +2,21 @@ package com.integrador.assets.mongo.repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import com.integrador.assets.domain.Asset;
+import com.integrador.assets.exception.NotFoundException;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.model.Filters;
 
@@ -29,7 +29,6 @@ public class AssetRepository {
 	private MongoTemplate mongoTemplate;
 
 	public void save(JSONArray jsonArray) {
-
 		jsonArray.forEach(itemJsonObject -> {
 			Document document = Document.parse(itemJsonObject.toString());
 			document.append("lastUpdateDate", LocalDateTime.now());
@@ -54,18 +53,34 @@ public class AssetRepository {
 		mongoTemplate.getCollection(COLLECTION_NAME).deleteMany(new Document());
 	}
 
-	public Document findById(String id) {
+	public Asset findById(String id) {
 		FindIterable<Document> documentIterable = mongoTemplate.getCollection(COLLECTION_NAME)
 				.find(Filters.eq("id", id));
-		return documentIterable.first();
+		if (!documentIterable.cursor().hasNext()) {
+			throw new NotFoundException();
+		}
+		return new Asset(documentIterable.first().toString());
 	}
 
-	public Set<JSONObject> findByFilters(List<String> filters, Sort sort, Pageable pageable) {
+	public List<Asset> findByFilters(List<CriteriaDefinition> filters, List<String> fieldsToReturn, Sort sort,
+			Pageable pagination) {
 		Query query = new Query();
-		query.addCriteria(Criteria.where("").is(""));
-		query.with(pageable).with(sort);
+		if (filters != null) {
+			filters.forEach(query::addCriteria);
+		}
+
+		if (fieldsToReturn != null) {
+			fieldsToReturn.forEach(query.fields()::include);
+		}
+
+		if (sort != null) {
+			query.with(sort);
+		}
+
+		query.with(pagination);
+
 		List<String> result = mongoTemplate.find(query, String.class, COLLECTION_NAME);
-		return result.stream().map(obj -> new JSONObject(obj)).collect(Collectors.toSet());
+		return result.stream().map(obj -> new Asset(obj)).collect(Collectors.toList());
 	}
 
 }
