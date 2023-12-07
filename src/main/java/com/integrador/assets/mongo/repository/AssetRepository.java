@@ -23,7 +23,8 @@ import com.mongodb.client.model.Filters;
 @Component
 public class AssetRepository {
 
-	private static final String COLLECTION_NAME = "asset";
+	public static final String COLLECTION_NAME = "asset";
+	public static final String DATABASE_NAME = "ms-manusis";
 
 	@Autowired
 	private MongoTemplate mongoTemplate;

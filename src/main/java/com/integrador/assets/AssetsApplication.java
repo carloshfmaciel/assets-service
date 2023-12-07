@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import com.integrador.assets.mongo.repository.AssetRepository;
-import com.integrador.assets.service.AssetCreateService;
+import com.integrador.assets.service.AssetUpdateService;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "com.integrador.assets")
@@ -23,7 +23,7 @@ public class AssetsApplication implements CommandLineRunner {
 	private MongoTemplate mongoTemplate;
 	
 	@Autowired
-	private AssetCreateService assetCreateService;
+	private AssetUpdateService assetCreateService;
 	
 	@Autowired
 	private AssetRepository assetRepository;

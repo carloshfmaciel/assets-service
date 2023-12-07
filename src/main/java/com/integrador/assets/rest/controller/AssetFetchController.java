@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.integrador.assets.domain.Asset;
 import com.integrador.assets.rest.request.AssetFetchRequest;
+import com.integrador.assets.rest.validator.AssetFetchValidator;
 import com.integrador.assets.service.AssetFetchService;
 import jakarta.websocket.server.PathParam;
 
@@ -20,11 +21,12 @@ public class AssetFetchController {
 
 	@GetMapping("/getByFilters")
 	public ResponseEntity getByFields(@RequestBody AssetFetchRequest request) {
+		AssetFetchValidator.validate(request);
 		List<Asset> result = assetFetchService.findByFilters(request);
 		return ResponseEntity.ok(result);
 	}
 
-	@GetMapping("/getById/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity getById(@PathParam("id") String id) {
 		Asset result = assetFetchService.findById(id);
 		return ResponseEntity.ok(result);
