@@ -38,7 +38,7 @@ public class AssetRepository {
 
 				Bson filterById = Filters.eq("id", document.get("id"));
 
-				boolean exists = mongoTemplate.getCollection(COLLECTION_NAME).find(filterById).first().isEmpty();
+				boolean exists = mongoTemplate.getCollection(COLLECTION_NAME).find(filterById).first() != null;
 
 				if (exists) {
 					mongoTemplate.getCollection(COLLECTION_NAME).replaceOne(filterById, document);

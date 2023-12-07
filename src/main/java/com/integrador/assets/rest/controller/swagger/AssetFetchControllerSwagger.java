@@ -3,6 +3,7 @@ package com.integrador.assets.rest.controller.swagger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.integrador.assets.rest.request.AssetFetchRequest;
 
@@ -21,7 +22,9 @@ public interface AssetFetchControllerSwagger {
 	@Operation(summary = "Find assets by filters", description = "REST Endpoint that finds assets by filters")
 	@Tags(value = @Tag(name = "assets", description = "Everything about assets"))
 	@GetMapping(value = "/getByFilters", produces = "application/json", consumes = "application/json")
-	public ResponseEntity getByFields(@RequestBody AssetFetchRequest request);
+	public ResponseEntity getByFields(@RequestParam("filters") String filters, @RequestParam("fields") String fields,
+			@RequestParam("orderBy") String orderBy, @RequestParam("pageNumber") Integer pageNumber,
+			@RequestParam("pageSize") Integer pageSize);
 	
 	@Operation(summary = "Find asset by id", description = "REST Endpoint that finds asset by id")
 	@Tags(value = @Tag(name = "assets", description = "Everything about assets"))
