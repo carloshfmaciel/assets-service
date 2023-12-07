@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.integrador.assets.domain.Asset;
+import com.integrador.assets.rest.controller.swagger.AssetFetchControllerSwagger;
 import com.integrador.assets.rest.request.AssetFetchRequest;
 import com.integrador.assets.rest.validator.AssetFetchValidator;
 import com.integrador.assets.service.AssetFetchService;
@@ -15,7 +16,7 @@ import jakarta.websocket.server.PathParam;
 @RestController
 @RequestMapping("/api/v1/assets")
 @SuppressWarnings("rawtypes")
-public class AssetFetchController {
+public class AssetFetchController implements AssetFetchControllerSwagger {
 
 	private AssetFetchService assetFetchService;
 

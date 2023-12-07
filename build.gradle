@@ -30,6 +30,7 @@ dependencies {
 	
 	implementation 'net.javacrumbs.shedlock:shedlock-spring:5.10.0'
 	implementation 'net.javacrumbs.shedlock:shedlock-provider-mongo:5.10.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
 }
 
 tasks.named('test') {
