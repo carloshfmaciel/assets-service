@@ -9,6 +9,7 @@ services:
     restart: unless-stopped
     ports:
       - "27017:27017"
+      
   mongo-express:
     image: mongo-express
     container_name: mexpress
@@ -23,3 +24,13 @@ services:
     restart: unless-stopped
     ports:
       - "8081:8081"
+      
+  pubsub:
+    image: gcr.io/google.com/cloudsdktool/google-cloud-cli:latest
+    container_name: gcp-pubsub-emulator
+    ports:
+      - "8085:8085"
+    command:
+      /bin/bash -c
+        "gcloud config set project emulator 
+        && gcloud beta emulators pubsub start --host-port 0.0.0.0:8085"           

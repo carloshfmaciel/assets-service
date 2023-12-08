@@ -2,10 +2,7 @@ package com.integrador.assets.rest.controller.swagger;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import com.integrador.assets.rest.request.AssetFetchRequest;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.tags.Tags;
 import jakarta.websocket.server.PathParam;
 
-@OpenAPIDefinition(info = @Info(title = "Destaxa Plan - OpenAPI 3.0", version = "v1.0", 
+@OpenAPIDefinition(info = @Info(title = "Mills Assets Service - OpenAPI 3.0", version = "v1.0", 
 	description = ""))
 @SuppressWarnings("rawtypes")
 public interface AssetFetchControllerSwagger {
