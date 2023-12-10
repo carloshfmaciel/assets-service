@@ -1,15 +1,24 @@
 package com.integrador.assets.service;
 
+import java.time.LocalDateTime;
+
+import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.integrador.assets.client.api.ManuSisApiClient;
+import com.integrador.assets.config.ManuSisBuilder;
+import com.integrador.assets.constants.ManuSisMessageAction;
 import com.integrador.assets.exception.UnexpectedException;
 import com.integrador.assets.mongo.repository.AssetRepository;
+import com.integrador.assets.pubsub.producer.ManuSisProducer;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class AssetUpdateService {
 
 	@Autowired
@@ -18,11 +27,34 @@ public class AssetUpdateService {
 	@Autowired
 	private AssetRepository assetsRepository;
 
+	@Autowired
+	private ManuSisProducer manuSisProducer;
+
 	public void update() {
 		try {
 			JSONObject assetsResponse = manuSisApiClient.fetchAssets();
 			JSONArray jsonArray = assetsResponse.getJSONArray("data");
-			assetsRepository.save(jsonArray);
+
+			jsonArray.forEach(item -> {
+				try {
+					Document document = Document.parse(item.toString());
+					document.append("lastUpdate", LocalDateTime.now());
+					String id = document.get("id").toString();
+					document.append("_id", id);
+					boolean exists = assetsRepository.existsById(id);
+					if (exists) {
+						System.out.println("ATUALIZANDO");
+						assetsRepository.update(document);
+						manuSisProducer.sendToPubSub(ManuSisBuilder.toMessage(id, ManuSisMessageAction.UPDATE));
+					} else {
+						System.out.println("INSERINDO");
+						assetsRepository.insert(document);
+						manuSisProducer.sendToPubSub(ManuSisBuilder.toMessage(id, ManuSisMessageAction.INSERT));
+					}
+				} catch (Exception e) {
+					log.error(String.format("Error to process message item %s", item.toString()), e);
+				}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new UnexpectedException(e);

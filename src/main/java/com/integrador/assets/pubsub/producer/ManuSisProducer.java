@@ -1,4 +1,4 @@
-package com.integrador.assets.pubsub;
+package com.integrador.assets.pubsub.producer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,7 +15,7 @@ public class ManuSisProducer {
 	@Value("${pubsub.topic.manusis}")
 	private String manuSisTopic;
 
-	public void sendToPubSub(String message) {
-		pubSubTemplate.publish(manuSisTopic, message);
+	public void sendToPubSub(ManusisMessage manusisMessage) {
+		pubSubTemplate.publish(manuSisTopic, manusisMessage);
 	}
 }

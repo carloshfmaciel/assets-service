@@ -1,16 +1,15 @@
 package com.integrador.assets.mongo.repository;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
@@ -29,25 +28,13 @@ public class AssetRepository {
 	@Autowired
 	private MongoTemplate mongoTemplate;
 
-	public void save(JSONArray jsonArray) {
-		jsonArray.forEach(itemJsonObject -> {
-			Document document = Document.parse(itemJsonObject.toString());
-			document.append("lastUpdateDate", LocalDateTime.now());
+	public void insert(Document document) {
+		mongoTemplate.getCollection(COLLECTION_NAME).insertOne(document);
+	}
 
-			if (document.get("id") != null) {
-
-				Bson filterById = Filters.eq("id", document.get("id"));
-
-				boolean exists = mongoTemplate.getCollection(COLLECTION_NAME).find(filterById).first() != null;
-
-				if (exists) {
-					mongoTemplate.getCollection(COLLECTION_NAME).replaceOne(filterById, document);
-				} else {
-					mongoTemplate.getCollection(COLLECTION_NAME).insertOne(document);
-				}
-			}
-
-		});
+	public void update(Document document) {
+		Bson filterById = Filters.eq("id", document.get("id"));
+		mongoTemplate.getCollection(COLLECTION_NAME).replaceOne(filterById, document);
 	}
 
 	public void deleteAll() {
@@ -55,12 +42,19 @@ public class AssetRepository {
 	}
 
 	public Asset findById(String id) {
-		FindIterable<Document> documentIterable = mongoTemplate.getCollection(COLLECTION_NAME)
-				.find(Filters.eq("id", id));
-		if (!documentIterable.cursor().hasNext()) {
+		Query query = new Query();
+		query.addCriteria(Criteria.where("_id").is(id));
+		String asset = mongoTemplate.findOne(query, String.class, COLLECTION_NAME);
+		if(asset == null) {
 			throw new NotFoundException();
 		}
-		return new Asset(documentIterable.first().toString());
+		return new Asset(asset);
+	}
+
+	public boolean existsById(String id) {
+		FindIterable<Document> documentIterable = mongoTemplate.getCollection(COLLECTION_NAME)
+				.find(Filters.eq("id", id));
+		return documentIterable.cursor().hasNext();
 	}
 
 	public List<Asset> findByFilters(List<CriteriaDefinition> filters, List<String> fieldsToReturn, Sort sort,

@@ -2,8 +2,10 @@ package com.integrador.assets.rest.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +23,7 @@ import jakarta.websocket.server.PathParam;
 @SuppressWarnings("rawtypes")
 public class AssetFetchController implements AssetFetchControllerSwagger {
 
+	@Autowired
 	private AssetFetchService assetFetchService;
 
 	@GetMapping("/getByFilters")
@@ -40,7 +43,7 @@ public class AssetFetchController implements AssetFetchControllerSwagger {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity getById(@PathParam("id") String id) {
+	public ResponseEntity getById(@PathVariable("id") String id) {
 		Asset result = assetFetchService.findById(id);
 		return ResponseEntity.ok(result);
 	}

@@ -1,4 +1,7 @@
 package com.integrador.assets;
+
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -10,8 +13,11 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import com.google.cloud.pubsub.v1.TopicAdminClient;
 import com.google.cloud.spring.pubsub.PubSubAdmin;
 import com.google.cloud.spring.pubsub.core.PubSubTemplate;
-import com.google.pubsub.v1.TopicName;
+import com.google.pubsub.v1.PubsubMessage;
+import com.integrador.assets.constants.ManuSisMessageAction;
 import com.integrador.assets.mongo.repository.AssetRepository;
+import com.integrador.assets.pubsub.producer.ManuSisProducer;
+import com.integrador.assets.pubsub.producer.ManusisMessage;
 import com.integrador.assets.service.AssetUpdateService;
 
 @SpringBootApplication
@@ -25,39 +31,50 @@ public class AssetsApplication implements CommandLineRunner {
 
 	@Autowired
 	private MongoTemplate mongoTemplate;
-	
+
 	@Autowired
 	private AssetUpdateService assetCreateService;
-	
+
 	@Autowired
 	private AssetRepository assetRepository;
-	
+
 	@Autowired
 	private PubSubTemplate pubSubTemplate;
-	
+
 	@Autowired
 	private TopicAdminClient topicAdminClient;
-		
+
 	@Autowired
 	private PubSubAdmin pubSubAdmin;
-	
+
+	@Autowired
+	private ManuSisProducer manuSisProducer;
+
 	@Override
 	public void run(String... args) throws Exception {
-		//System.out.println(mongoTemplate.findAll(DBObject.class, "asset").size());;
-		//assetCreateService.createAssets();
-		//assetRepository.deleteAll();
+		// System.out.println(mongoTemplate.findAll(DBObject.class, "asset").size());;
+		// assetCreateService.createAssets();
+		// assetRepository.deleteAll();
 //		Query query = new Query();
 //		query.fields().include("asset_type.description");
 //		List<String> result = mongoTemplate.find(query, String.class, "asset");
 //		System.out.println(result.stream().map(obj -> new JSONObject(obj)).collect(Collectors.toSet()));
-		
+
 //		pubSubTemplate.subscribe("manusis-subscription", basicAcknowledgeablePubsubMessage -> {
-//			System.out.println("Mensagem recebida " + basicAcknowledgeablePubsubMessage.getPubsubMessage().getData().toString());
+//			System.out.println("Mensagem recebida " + basicAcknowledgeablePubsubMessage.getPubsubMessage());
 //			basicAcknowledgeablePubsubMessage.ack();
 //			System.out.println("Recebeu!");
 //		});
-//		
-//		pubSubTemplate.publish("manusis-topic", "Testandoooo");
+//
+//		pubSubTemplate.subscribeAndConvert("manusis-subscription", convertedBasicAcknowledgeablePubsubMessage -> {
+//			System.out.println("Mensagem recebida " + convertedBasicAcknowledgeablePubsubMessage.getPayload());
+//			convertedBasicAcknowledgeablePubsubMessage.ack();
+//			System.out.println("Recebeu!");
+//		}, ManusisMessage.class);
+//
+//		pubSubTemplate.publish("manusis-topic", ManusisMessage.builder().id("dasdahskh8768daskljdlas")
+//				.action(ManuSisMessageAction.INSERT).currentTimeStamp(LocalDateTime.now()).build());
 //		System.out.println("Enviou!");
+//		assetRepository.deleteAll();
 	}
 }
