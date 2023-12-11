@@ -8,8 +8,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.integrador.assets.builder.ManuSisMessageBuilder;
 import com.integrador.assets.client.api.ManuSisApiClient;
-import com.integrador.assets.config.ManuSisBuilder;
 import com.integrador.assets.constants.ManuSisMessageAction;
 import com.integrador.assets.exception.UnexpectedException;
 import com.integrador.assets.mongo.repository.AssetRepository;
@@ -43,13 +43,11 @@ public class AssetUpdateService {
 					document.append("_id", id);
 					boolean exists = assetsRepository.existsById(id);
 					if (exists) {
-						System.out.println("ATUALIZANDO");
 						assetsRepository.update(document);
-						manuSisProducer.sendToPubSub(ManuSisBuilder.toMessage(id, ManuSisMessageAction.UPDATE));
+						manuSisProducer.sendToPubSub(ManuSisMessageBuilder.toMessage(id, ManuSisMessageAction.UPDATE));
 					} else {
-						System.out.println("INSERINDO");
 						assetsRepository.insert(document);
-						manuSisProducer.sendToPubSub(ManuSisBuilder.toMessage(id, ManuSisMessageAction.INSERT));
+						manuSisProducer.sendToPubSub(ManuSisMessageBuilder.toMessage(id, ManuSisMessageAction.INSERT));
 					}
 				} catch (Exception e) {
 					log.error(String.format("Error to process message item %s", item.toString()), e);

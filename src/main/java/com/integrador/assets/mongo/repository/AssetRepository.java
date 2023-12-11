@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -15,8 +14,6 @@ import org.springframework.stereotype.Component;
 
 import com.integrador.assets.domain.Asset;
 import com.integrador.assets.exception.NotFoundException;
-import com.mongodb.client.FindIterable;
-import com.mongodb.client.model.Filters;
 
 @Component
 public class AssetRepository {
@@ -32,8 +29,9 @@ public class AssetRepository {
 	}
 
 	public void update(Document document) {
-		Bson filterById = Filters.eq("id", document.get("id"));
-		mongoTemplate.getCollection(COLLECTION_NAME).replaceOne(filterById, document);
+		Query query = new Query();
+		query.addCriteria(Criteria.where("id").is(Integer.valueOf(document.get("id").toString())));
+		mongoTemplate.replace(query, document, COLLECTION_NAME);
 	}
 
 	public void deleteAll() {
@@ -51,13 +49,15 @@ public class AssetRepository {
 	}
 
 	public boolean existsById(String id) {
-		FindIterable<Document> documentIterable = mongoTemplate.getCollection(COLLECTION_NAME)
-				.find(Filters.eq("id", id));
-		return documentIterable.cursor().hasNext();
+		try {
+			this.findById(id);
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
-	public List<Asset> findByFilters(Criteria filters, List<String> fieldsToReturn, Sort sort,
-			Pageable pagination) {
+	public List<Asset> findByFilters(Criteria filters, List<String> fieldsToReturn, Sort sort, Pageable pagination) {
 		Query query = new Query();
 		if (filters != null) {
 			query.addCriteria(filters);
