@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
@@ -43,9 +42,9 @@ public class AssetRepository {
 
 	public Asset findById(String id) {
 		Query query = new Query();
-		query.addCriteria(Criteria.where("_id").is(id));
+		query.addCriteria(Criteria.where("id").is(Integer.valueOf(id)));
 		String asset = mongoTemplate.findOne(query, String.class, COLLECTION_NAME);
-		if(asset == null) {
+		if (asset == null) {
 			throw new NotFoundException();
 		}
 		return new Asset(asset);
@@ -57,11 +56,11 @@ public class AssetRepository {
 		return documentIterable.cursor().hasNext();
 	}
 
-	public List<Asset> findByFilters(List<CriteriaDefinition> filters, List<String> fieldsToReturn, Sort sort,
+	public List<Asset> findByFilters(Criteria filters, List<String> fieldsToReturn, Sort sort,
 			Pageable pagination) {
 		Query query = new Query();
 		if (filters != null) {
-			filters.forEach(query::addCriteria);
+			query.addCriteria(filters);
 		}
 
 		if (fieldsToReturn != null) {
@@ -76,6 +75,15 @@ public class AssetRepository {
 
 		List<String> result = mongoTemplate.find(query, String.class, COLLECTION_NAME);
 		return result.stream().map(obj -> new Asset(obj)).collect(Collectors.toList());
+	}
+
+	public int countByFilters(Criteria filters) {
+		Query query = new Query();
+		if (filters != null) {
+			query.addCriteria(filters);
+		}
+
+		return (int) mongoTemplate.count(query, String.class, COLLECTION_NAME);
 	}
 
 }

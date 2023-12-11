@@ -1,6 +1,8 @@
 package com.integrador.assets.rest.request.parser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.util.StringUtils;
 
 import com.integrador.assets.rest.request.AssetFetchRequest;
@@ -30,24 +31,58 @@ public class AssetFetchRequestParser {
 		return sortDirection.equalsIgnoreCase("asc");
 	}
 
-	public static List<CriteriaDefinition> getFilters(AssetFetchRequest request) {
-		if(request.getFilter() == null) {
+	public static Criteria getFilters(AssetFetchRequest request) {
+		if (request.getFilter() == null) {
 			return null;
 		}
 		
 		List<String> filterParameters = splitSemicolon(request.getFilter());
-		return filterParameters.stream().map(filter -> {
+		List<Criteria> conditions = filterParameters.stream().map(filter -> {
 			String[] fieldAndValue = ParameterRequestUtils.getFilterInValues(filter);
 
 			String fieldName = fieldAndValue[0];
-			String value = fieldAndValue[1];
 
-			return Criteria.where(fieldName).is(value);
+			String valueAsString = fieldAndValue[1];
+			Boolean valueAsBoolean = getValueAsBoolean(fieldAndValue[1]);
+			Long valueAsNumeric = getValueAsNumeric(fieldAndValue[1]);
+			
+			Collection<Criteria> criteriaList = new ArrayList<>();
+		
+			criteriaList.add(Criteria.where(fieldName).is(valueAsString));
+
+			if (valueAsBoolean != null) {
+				criteriaList.add(Criteria.where(fieldName).is(valueAsBoolean));
+			}
+
+			if (valueAsNumeric != null) {
+				criteriaList.add(Criteria.where(fieldName).is(valueAsNumeric));
+			}
+			
+			return new Criteria().orOperator(criteriaList);
+			
 		}).collect(Collectors.toList());
+		
+		return new Criteria().andOperator(conditions);
 	}
-	
+
+	private static Boolean getValueAsBoolean(String value) {
+		if (value.equalsIgnoreCase("true") || value.equalsIgnoreCase("false")) {
+			return Boolean.valueOf(value);
+		}
+		return null;
+	}
+
+	private static Long getValueAsNumeric(String value) {
+		try {
+			Long valueAsLong = Long.valueOf(value);
+			return valueAsLong;
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	public static List<String> getFields(AssetFetchRequest request) {
-		return splitSemicolon(request.getFilter());
+		return splitSemicolon(request.getFields());
 	}
 
 	public static Sort getOrderBy(AssetFetchRequest request) {

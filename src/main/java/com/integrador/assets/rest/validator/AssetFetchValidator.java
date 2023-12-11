@@ -16,6 +16,18 @@ public class AssetFetchValidator {
 				throw new InvalidParameterException("Formato do parâmetro filter inválido!");
 			}
 		}
+		
+		if(request.getPageNumber() < 0) {
+			throw new InvalidParameterException("Parâmetro pageNumber deve ser maior que 0!");
+		}
+		
+		if(request.getPageSize() < 1) {
+			throw new InvalidParameterException("Parâmetro pageSize deve ser maior que 0!");
+		}
+		
+		if(request.getPageSize() > 50) {
+			throw new InvalidParameterException("Parâmetro pageSize deve ser menor ou igual 50!");
+		}
 
 		if (StringUtils.hasText(request.getOrderBy())) {
 			if (!Pattern.matches(REGEX_ORDERBY, request.getOrderBy().toLowerCase())) {

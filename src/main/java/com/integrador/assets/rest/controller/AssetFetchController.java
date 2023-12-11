@@ -1,7 +1,5 @@
 package com.integrador.assets.rest.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +14,6 @@ import com.integrador.assets.rest.request.AssetFetchRequest;
 import com.integrador.assets.rest.validator.AssetFetchValidator;
 import com.integrador.assets.service.AssetFetchService;
 
-import jakarta.websocket.server.PathParam;
-
 @RestController
 @RequestMapping("/api/v1/assets")
 @SuppressWarnings("rawtypes")
@@ -27,24 +23,20 @@ public class AssetFetchController implements AssetFetchControllerSwagger {
 	private AssetFetchService assetFetchService;
 
 	@GetMapping("/getByFilters")
-	public ResponseEntity getByFields(@RequestParam("filters") String filters, @RequestParam("fields") String fields,
-			@RequestParam("orderBy") String orderBy, @RequestParam("pageNumber") Integer pageNumber,
-			@RequestParam("pageSize") Integer pageSize) {
-		AssetFetchRequest request = AssetFetchRequest.builder()
-										.filter(filters)
-										.fields(fields)
-										.orderBy(orderBy)
-										.pageNumber(pageNumber)
-										.pageSize(pageSize)
-										.build();
+	public ResponseEntity getByFilters(@RequestParam(name = "filters", required = false) String filters,
+			@RequestParam(name = "fields", required = false) String fields,
+			@RequestParam(name = "orderBy", required = false) String orderBy,
+			@RequestParam(name = "pageNumber", required = false) Integer pageNumber,
+			@RequestParam(name = "pageSize", required = false) Integer pageSize) {
+		AssetFetchRequest request = AssetFetchRequest.builder().filter(filters).fields(fields).orderBy(orderBy)
+				.pageNumber(pageNumber).pageSize(pageSize).build();
 		AssetFetchValidator.validate(request);
-		List<Asset> result = assetFetchService.findByFilters(request);
-		return ResponseEntity.ok(result);
+		return ResponseEntity.ok(assetFetchService.findByFilters(request));
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity getById(@PathVariable("id") String id) {
 		Asset result = assetFetchService.findById(id);
-		return ResponseEntity.ok(result);
+		return ResponseEntity.ok(result.toMap());
 	}
 }

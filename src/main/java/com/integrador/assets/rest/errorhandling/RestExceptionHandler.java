@@ -17,6 +17,7 @@ public class RestExceptionHandler {
 
 	@ExceptionHandler(BadRequestException.class)
 	public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException ex, HttpServletRequest request) {
+		ex.printStackTrace();
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(new ErrorResponse(
 				HttpStatus.BAD_REQUEST.value(), BadRequestException.class.getName(), ex.getMessage()));
 	}
@@ -24,6 +25,7 @@ public class RestExceptionHandler {
 	@ExceptionHandler(InvalidParameterException.class)
 	public ResponseEntity<ErrorResponse> handleInvalidParameterException(InvalidParameterException ex,
 			HttpServletRequest request) {
+		ex.printStackTrace();
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(new ErrorResponse(
 				HttpStatus.BAD_REQUEST.value(), InvalidParameterException.class.getName(), ex.getMessage()));
 	}
@@ -31,18 +33,21 @@ public class RestExceptionHandler {
 	@ExceptionHandler(NotFoundException.class)
 	public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex,
 			HttpServletRequest request) {
+		ex.printStackTrace();
 		return ResponseEntity.status(HttpStatus.NOT_FOUND.value()).body(new ErrorResponse(
 				HttpStatus.NOT_FOUND.value(), NotFoundException.class.getName(), ex.getMessage()));
 	}
 
 	@ExceptionHandler(UnexpectedException.class)
 	public ResponseEntity<ErrorResponse> handleUnexpectedException(UnexpectedException ex, HttpServletRequest request) {
+		ex.printStackTrace();
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(new ErrorResponse(
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), UnexpectedException.class.getName(), ex.getMessage()));
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse> handleException(Exception ex, HttpServletRequest request) {
+		ex.printStackTrace();
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(new ErrorResponse(
 				HttpStatus.INTERNAL_SERVER_ERROR.value(), Exception.class.getName(), ex.getMessage()));
 	}

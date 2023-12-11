@@ -19,7 +19,7 @@ public interface AssetFetchControllerSwagger {
 	@Operation(summary = "Find assets by filters", description = "REST Endpoint that finds assets by filters")
 	@Tags(value = @Tag(name = "assets", description = "Everything about assets"))
 	@GetMapping(value = "/getByFilters", produces = "application/json", consumes = "application/json")
-	public ResponseEntity getByFields(@RequestParam("filters") String filters, @RequestParam("fields") String fields,
+	public ResponseEntity getByFilters(@RequestParam("filters") String filters, @RequestParam("fields") String fields,
 			@RequestParam("orderBy") String orderBy, @RequestParam("pageNumber") Integer pageNumber,
 			@RequestParam("pageSize") Integer pageSize);
 	

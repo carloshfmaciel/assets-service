@@ -2,6 +2,8 @@ package com.integrador.assets.rest.request;
 
 import org.springframework.util.StringUtils;
 
+import com.integrador.assets.constants.Pagination;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,15 +32,17 @@ public class AssetFetchRequest {
 			} else {
 				return pageNumber - 1;
 			}
+		}else {
+			pageNumber = Pagination.DEFAULT_PAGE_NUMBER-1;
 		}
 		return pageNumber;
 	}
 
 	public Integer getPageSize() {
 		if (pageSize == null) {
-			pageSize = 50;
+			pageSize = 30;
 		}
-		return pageNumber;
+		return pageSize;
 	}
 
 	public String getOrderBy() {
