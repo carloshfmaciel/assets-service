@@ -20,7 +20,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
 @DisplayName("Writing assertions to ManuSisApiClient")
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ManuSisApiClientTest {
 
 	@InjectMocks
@@ -29,13 +29,13 @@ public class ManuSisApiClientTest {
 	@BeforeEach
 	void init() {
 		MockitoAnnotations.openMocks(this);
+
+		ReflectionTestUtils.setField(manuSisApiClient, "manuSisApiUrl", "https://www.someurl.com");
+		ReflectionTestUtils.setField(manuSisApiClient, "manuSisApiToken", "tokenFake");
 	}
 
 	@Test
 	void whenManusisApiAnswersWithHttpStatusCodeBetween200And300ItMustReturnsJsonResponseBody() throws Exception {
-		ReflectionTestUtils.setField(manuSisApiClient, "manuSisApiUrl", "https://www.someurl.com");
-		ReflectionTestUtils.setField(manuSisApiClient, "manuSisApiToken", "tokenFake");
-
 		HttpClient mockedHttpClient = mock(HttpClient.class);
 
 		try (MockedStatic mockStatic = mockStatic(HttpClient.class)) {
@@ -58,9 +58,6 @@ public class ManuSisApiClientTest {
 
 	@Test
 	void whenManusisApiAnswersWithHttpStatusCodeIsNotBetween200And300ItMustThrowsRuntimeException() throws Exception {
-		ReflectionTestUtils.setField(manuSisApiClient, "manuSisApiUrl", "https://www.someurl.com");
-		ReflectionTestUtils.setField(manuSisApiClient, "manuSisApiToken", "tokenFake");
-
 		HttpClient mockedHttpClient = mock(HttpClient.class);
 
 		try (MockedStatic<HttpClient> mockStatic = mockStatic(HttpClient.class)) {
@@ -72,6 +69,25 @@ public class ManuSisApiClientTest {
 			when(mockedHttpClient.send(any(), any())).thenReturn(httpResponse);
 			when(httpResponse.body()).thenReturn("{\"is_readonly\": false, \"id\": 237469}");
 			when(httpResponse.statusCode()).thenReturn(404);
+
+			assertThrows(RuntimeException.class, () -> manuSisApiClient.fetchAssets(),
+					"it should throw RuntimeException");
+		}
+	}
+
+	@Test
+	void whenManusisApiAnswersWithHttpStatusCodeIsLessThan200ItMustThrowsRuntimeException() throws Exception {
+		HttpClient mockedHttpClient = mock(HttpClient.class);
+
+		try (MockedStatic<HttpClient> mockStatic = mockStatic(HttpClient.class)) {
+
+			mockStatic.when(HttpClient::newHttpClient).thenReturn(mockedHttpClient);
+
+			HttpResponse httpResponse = mock(HttpResponse.class);
+
+			when(mockedHttpClient.send(any(), any())).thenReturn(httpResponse);
+			when(httpResponse.body()).thenReturn("{\"is_readonly\": false, \"id\": 237469}");
+			when(httpResponse.statusCode()).thenReturn(150);
 
 			assertThrows(RuntimeException.class, () -> manuSisApiClient.fetchAssets(),
 					"it should throw RuntimeException");
