@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,7 @@ public class AssetFetchRequestParser {
 				.map(values -> Arrays.stream(values).map(String::trim).collect(Collectors.toList())).orElse(null);
 	}
 
-	private static boolean isASC(String sortDirection) {
+	public static boolean isASC(String sortDirection) {
 		if (!StringUtils.hasText(sortDirection)) {
 			throw new IllegalArgumentException();
 		}
@@ -32,7 +33,7 @@ public class AssetFetchRequestParser {
 	}
 
 	public static Criteria getFilters(AssetFetchRequest request) {
-		if (request.getFilter() == null) {
+		if (Objects.isNull(request) || Objects.isNull(request.getFilter())) {
 			return null;
 		}
 		
