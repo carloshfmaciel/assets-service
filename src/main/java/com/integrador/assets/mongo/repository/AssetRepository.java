@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import com.integrador.assets.domain.Asset;
 import com.integrador.assets.exception.NotFoundException;
@@ -74,6 +75,11 @@ public class AssetRepository {
 		query.with(pagination);
 
 		List<String> result = mongoTemplate.find(query, String.class, COLLECTION_NAME);
+		
+		if(CollectionUtils.isEmpty(result)) {
+			throw new NotFoundException();
+		}
+		
 		return result.stream().map(obj -> new Asset(obj)).collect(Collectors.toList());
 	}
 

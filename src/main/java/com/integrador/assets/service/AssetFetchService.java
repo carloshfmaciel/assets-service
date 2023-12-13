@@ -31,10 +31,6 @@ public class AssetFetchService {
 
 		List<Asset> result = assetsRepository.findByFilters(filters, fieldsToReturn, orderBy, pagination);
 
-		if (result == null || result.isEmpty()) {
-			throw new NotFoundException();
-		}
-
 		int totalResultCount = assetsRepository.countByFilters(filters);
 
 		return AssetResponseBuilder.toAssetResponse(result, request.getPageNumber() + 1, request.getPageSize(),
