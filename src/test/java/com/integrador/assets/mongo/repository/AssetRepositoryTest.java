@@ -1,4 +1,4 @@
-package com.integrador.assets.repository;
+package com.integrador.assets.mongo.repository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -30,7 +30,6 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import com.integrador.assets.domain.Asset;
 import com.integrador.assets.exception.NotFoundException;
-import com.integrador.assets.mongo.repository.AssetRepository;
 import com.mongodb.client.MongoCollection;
 
 @DisplayName("Writing assertions to AssetRepository")
