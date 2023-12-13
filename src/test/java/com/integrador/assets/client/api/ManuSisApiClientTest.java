@@ -12,19 +12,19 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.MockedStatic;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
+@DisplayName("Writing assertions to ManuSisApiClient")
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ManuSisApiClientTest {
 
 	@InjectMocks
 	private ManuSisApiClient manuSisApiClient;
-
-//	@Spy
-//	private HttpClient httpClient;
 
 	@BeforeEach
 	void init() {
@@ -63,7 +63,7 @@ public class ManuSisApiClientTest {
 
 		HttpClient mockedHttpClient = mock(HttpClient.class);
 
-		try (MockedStatic mockStatic = mockStatic(HttpClient.class)) {
+		try (MockedStatic<HttpClient> mockStatic = mockStatic(HttpClient.class)) {
 
 			mockStatic.when(HttpClient::newHttpClient).thenReturn(mockedHttpClient);
 

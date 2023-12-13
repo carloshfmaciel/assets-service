@@ -6,14 +6,11 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.integrador.assets.constants.ManuSisMessageAction;
 import com.integrador.assets.pubsub.producer.ManusisMessage;
 
 @DisplayName("Writing assertions to ManuSisMessageBuilder")
-@ExtendWith(MockitoExtension.class)
 public class ManuSisMessageBuilderTest {
 
 	@Test
