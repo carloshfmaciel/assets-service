@@ -47,7 +47,7 @@ public class AssetFetchRequest {
 
 	public String getOrderBy() {
 		if (!StringUtils.hasText(orderBy)) {
-			orderBy = "created_at:desc";
+			orderBy = Pagination.DEFAULT_ORDER_BY;
 		}
 		return orderBy;
 	}
