@@ -36,11 +36,6 @@ public class PubSubConfig {
 		return new NoCredentialsProvider();
 	}
 
-//	@Bean
-//	MessageChannel pubsubInputChannel() {
-//		return new DirectChannel();
-//	}
-
 	@Bean
 	Topic manuSisTopic(TopicAdminClient topicAdminClient) {
 		try {
@@ -51,7 +46,7 @@ public class PubSubConfig {
 	}
 
 	@Bean
-	Subscription mySubscription(PubSubAdmin pubSubAdmin) {
+	Subscription manuSisSubscription(PubSubAdmin pubSubAdmin) {
 		Subscription subscription = pubSubAdmin.getSubscription(manusisSubscription);
 		if (subscription == null) {
 			return pubSubAdmin.createSubscription(manusisSubscription, manusisTopic);
