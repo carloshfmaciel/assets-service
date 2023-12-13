@@ -21,9 +21,13 @@ public class ManuSisApiClient {
 	public JSONObject fetchAssets() throws Exception {
 		HttpClient httpClient = HttpClient.newHttpClient();
 
-		HttpRequest request = HttpRequest.newBuilder().uri(URI.create(manuSisApiUrl))
-				.header("Content-Type", "application/json").header("Authorization", "Token token=" + manuSisApiToken)
-				.header("app-origin", "API").header("x-language", "pt_BR").build();
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(manuSisApiUrl))
+				.header("Content-Type", "application/json")
+				.header("Authorization", "Token token=" + manuSisApiToken)
+				.header("app-origin", "API")
+				.header("x-language", "pt_BR")
+				.build();
 
 		HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 

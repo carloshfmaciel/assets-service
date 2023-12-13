@@ -5,7 +5,9 @@ plugins {
 }
 
 group = 'com.integrador'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0-SNAPSHOT'
+
+apply plugin: 'jacoco'
 
 java {
 	sourceCompatibility = '17'
@@ -35,8 +37,30 @@ dependencies {
 	
 	implementation 'com.google.cloud:spring-cloud-gcp-starter-pubsub:4.7.2'
 	implementation 'org.springframework.integration:spring-integration-core:6.2.0'
+	
+	// UNIT TESTS
+	testRuntimeOnly 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.mockito:mockito-junit-jupiter:5.8.0'
+	testRuntimeOnly 'org.mockito:mockito-inline:5.2.0'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+// RODAR JACOCO REPORT APOS CADA BUILD
+test.finalizedBy jacocoTestReport
+
+// RODAR A VERIFICACAO DE COBERTURA MININA DE TESTE
+check.dependsOn jacocoTestCoverageVerification
+/*jacocoTestCoverageVerification {
+  violationRules {
+    rule {
+      limit {
+        counter = 'LINE'
+        value = 'COVEREDRATIO'
+        minimum = 0.8
+      }
+    }
+  }
+}*/

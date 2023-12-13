@@ -11,6 +11,9 @@ import com.integrador.assets.rest.response.AssetResponse;
 
 public class AssetResponseBuilder {
 
+	private AssetResponseBuilder() {
+	}
+
 	public static AssetResponse toAssetResponse(List<Asset> assets, Integer pageNumber, Integer pageSize,
 			Integer totalResultCount) {
 		if (pageNumber == null) {
