@@ -68,6 +68,14 @@ jacocoTestReport {
 	    csv.required=false
 	    html.destination file("${buildDir}/jacocoHtml")
 	}
+	
+	afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                "com/integrador/assets/AssetsApplication.class"
+            ])
+        }))
+    }
 }
 
 // RODAR A VERIFICACAO DE COBERTURA MININA DE TESTE

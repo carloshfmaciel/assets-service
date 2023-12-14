@@ -1,57 +1,45 @@
 package com.integrador.assets;
 
-import java.time.LocalDateTime;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
-import com.google.cloud.pubsub.v1.TopicAdminClient;
-import com.google.cloud.spring.pubsub.PubSubAdmin;
-import com.google.cloud.spring.pubsub.core.PubSubTemplate;
-import com.google.pubsub.v1.PubsubMessage;
-import com.integrador.assets.constants.ManuSisMessageAction;
-import com.integrador.assets.mongo.repository.AssetRepository;
-import com.integrador.assets.pubsub.producer.ManuSisProducer;
-import com.integrador.assets.pubsub.producer.ManusisMessage;
-import com.integrador.assets.service.AssetUpdateService;
+import lombok.Generated;
 
 @SpringBootApplication
 @ComponentScan(basePackages = "com.integrador.assets")
 @EnableMongoRepositories
-public class AssetsApplication implements CommandLineRunner {
+@Generated
+public class AssetsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AssetsApplication.class, args);
 	}
 
-	@Autowired
-	private MongoTemplate mongoTemplate;
+//	@Autowired
+//	private MongoTemplate mongoTemplate;
+//
+//	@Autowired
+//	private AssetUpdateService assetCreateService;
+//
+//	@Autowired
+//	private AssetRepository assetRepository;
+//
+//	@Autowired
+//	private PubSubTemplate pubSubTemplate;
+//
+//	@Autowired
+//	private TopicAdminClient topicAdminClient;
+//
+//	@Autowired
+//	private PubSubAdmin pubSubAdmin;
+//
+//	@Autowired
+//	private ManuSisProducer manuSisProducer;
 
-	@Autowired
-	private AssetUpdateService assetCreateService;
-
-	@Autowired
-	private AssetRepository assetRepository;
-
-	@Autowired
-	private PubSubTemplate pubSubTemplate;
-
-	@Autowired
-	private TopicAdminClient topicAdminClient;
-
-	@Autowired
-	private PubSubAdmin pubSubAdmin;
-
-	@Autowired
-	private ManuSisProducer manuSisProducer;
-
-	@Override
-	public void run(String... args) throws Exception {
+//	@Override
+//	public void run(String... args) throws Exception {
 		// System.out.println(mongoTemplate.findAll(DBObject.class, "asset").size());;
 		// assetCreateService.createAssets();
 		// assetRepository.deleteAll();
@@ -76,5 +64,5 @@ public class AssetsApplication implements CommandLineRunner {
 //				.action(ManuSisMessageAction.INSERT).currentTimeStamp(LocalDateTime.now()).build());
 //		System.out.println("Enviou!");
 //		assetRepository.deleteAll();
-	}
+//	}
 }
