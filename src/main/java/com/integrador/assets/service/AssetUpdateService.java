@@ -54,7 +54,7 @@ public class AssetUpdateService {
 				}
 			});
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 			throw new UnexpectedException(e);
 		}
 	}
