@@ -8,12 +8,14 @@ import com.integrador.assets.constants.ManuSisMessageAction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Generated;
 import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Generated
 public class ManusisMessage implements Serializable {
 
 	private static final long serialVersionUID = 6773716242887246986L;

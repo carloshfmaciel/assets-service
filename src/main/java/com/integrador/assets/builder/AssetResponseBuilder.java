@@ -26,5 +26,4 @@ public class AssetResponseBuilder {
 		return AssetResponse.builder().pageNumber(pageNumber).pageSize(pageSize).total(totalResultCount)
 				.result(assets.stream().map(JSONObject::toMap).collect(Collectors.toList())).build();
 	}
-
 }

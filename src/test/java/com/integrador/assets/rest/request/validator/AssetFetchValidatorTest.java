@@ -11,7 +11,7 @@ import com.integrador.assets.rest.request.AssetFetchRequest;
 import com.integrador.assets.rest.validator.AssetFetchValidator;
 
 @DisplayName("Writing assertions to AssetFetchValidator")
-public class AssetFetchValidatorTest {
+class AssetFetchValidatorTest {
 	
 	@Test
 	void testValidateMethodWhenNoFieldIsInformedItMustNotThrowAnyException() {
@@ -31,8 +31,8 @@ public class AssetFetchValidatorTest {
 	@Test
 	void testValidateMethodWhenFilterIsValidItMustNotThrowAnyException() {
 		assertDoesNotThrow(() -> {
-			String invalidFilter = "field:value";
-			AssetFetchValidator.validate(AssetFetchRequest.builder().filter(invalidFilter).build());
+			String validFilter = "field:value";
+			AssetFetchValidator.validate(AssetFetchRequest.builder().filter(validFilter).build());
 		});
 	}
 	
@@ -72,6 +72,14 @@ public class AssetFetchValidatorTest {
 	void testValidateMethodWhenOrderByIsValidItMustNotThrowAnyException() {
 		assertDoesNotThrow(() -> {
 			String orderBy = "field:asc";
+			AssetFetchValidator.validate(AssetFetchRequest.builder().orderBy(orderBy).build());
+		});
+	}
+	
+	@Test
+	void testValidateMethodWhenOrderByIsNullItMustNotThrowAnyException() {
+		assertDoesNotThrow(() -> {
+			String orderBy = "";
 			AssetFetchValidator.validate(AssetFetchRequest.builder().orderBy(orderBy).build());
 		});
 	}

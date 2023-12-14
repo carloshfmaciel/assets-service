@@ -61,4 +61,5 @@ public class AssetResponseBuilderTest {
 						.total(totalResultCount)
 						.result(assets.stream().map(JSONObject::toMap).collect(Collectors.toList())).build());
 	}
+
 }
