@@ -20,6 +20,9 @@ import com.integrador.assets.utils.ParameterRequestUtils;
 
 public class AssetFetchRequestParser {
 
+	private AssetFetchRequestParser() {
+	}
+
 	private static List<String> splitSemicolon(String fields) {
 		return Optional.ofNullable(fields).map(value -> value.split(";"))
 				.map(values -> Arrays.stream(values).map(String::trim).collect(Collectors.toList())).orElse(null);
@@ -36,7 +39,7 @@ public class AssetFetchRequestParser {
 		if (Objects.isNull(request) || Objects.isNull(request.getFilter())) {
 			return null;
 		}
-		
+
 		List<String> filterParameters = splitSemicolon(request.getFilter());
 		List<Criteria> conditions = filterParameters.stream().map(filter -> {
 			String[] fieldAndValue = ParameterRequestUtils.getFilterInValues(filter);
@@ -46,9 +49,9 @@ public class AssetFetchRequestParser {
 			String valueAsString = fieldAndValue[1];
 			Boolean valueAsBoolean = getValueAsBoolean(fieldAndValue[1]);
 			Long valueAsNumeric = getValueAsNumeric(fieldAndValue[1]);
-			
+
 			Collection<Criteria> criteriaList = new ArrayList<>();
-		
+
 			criteriaList.add(Criteria.where(fieldName).is(valueAsString));
 
 			if (valueAsBoolean != null) {
@@ -58,11 +61,11 @@ public class AssetFetchRequestParser {
 			if (valueAsNumeric != null) {
 				criteriaList.add(Criteria.where(fieldName).is(valueAsNumeric));
 			}
-			
+
 			return new Criteria().orOperator(criteriaList);
-			
+
 		}).collect(Collectors.toList());
-		
+
 		return new Criteria().andOperator(conditions);
 	}
 

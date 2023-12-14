@@ -7,6 +7,9 @@ import com.integrador.assets.rest.request.AssetFetchRequest;
 
 public class AssetFetchValidator {
 
+	private AssetFetchValidator() {
+	}
+
 	private static final String REGEX_FILTER = "([\\w.]+:(\\[\\w+(,\\s*\\w+)*\\]+))|([\\w.|\\W.]+:[\\w.|\\W.]+){0,}(;{1,1}[\\w.]+:[\\w.]+){0,}";
 	private static final String REGEX_ORDERBY = "([\\w.]+:(asc|desc))(;{1,1}[\\w.]+:(asc|desc)){0,}";
 
@@ -16,16 +19,16 @@ public class AssetFetchValidator {
 				throw new InvalidParameterException("Formato do parâmetro filter inválido!");
 			}
 		}
-		
-		if(request.getPageNumber() < 0) {
+
+		if (request.getPageNumber() < 0) {
 			throw new InvalidParameterException("Parâmetro pageNumber deve ser maior que 0!");
 		}
-		
-		if(request.getPageSize() < 1) {
+
+		if (request.getPageSize() < 1) {
 			throw new InvalidParameterException("Parâmetro pageSize deve ser maior que 0!");
 		}
-		
-		if(request.getPageSize() > 50) {
+
+		if (request.getPageSize() > 50) {
 			throw new InvalidParameterException("Parâmetro pageSize deve ser menor ou igual 50!");
 		}
 
